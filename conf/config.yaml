@@ -1,6 +1,0 @@
-output: ${hydra:runtime.cwd}/gen
-modules:
-  - name : torch.optim
-    classes:
-      - Adam
-      - AdamW
