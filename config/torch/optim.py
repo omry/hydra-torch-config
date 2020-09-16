@@ -4,10 +4,9 @@
 # isort:skip_file
 # flake8: noqa
 
-from dataclasses import dataclass
-from typing import *
-
+from dataclasses import dataclass, field
 from omegaconf import MISSING
+from typing import Any
 
 
 @dataclass
@@ -43,6 +42,16 @@ class AdamConf:
 
 
 @dataclass
+class AdamaxConf:
+    _target_: str = "torch.optim.Adamax"
+    params: Any = MISSING
+    lr: Any = 0.002
+    betas: Any = (0.9, 0.999)
+    eps: Any = 1e-08
+    weight_decay: Any = 0
+
+
+@dataclass
 class AdamWConf:
     _target_: str = "torch.optim.AdamW"
     params: Any = MISSING
@@ -51,16 +60,6 @@ class AdamWConf:
     eps: Any = 1e-08
     weight_decay: Any = 0.01
     amsgrad: Any = False
-
-
-@dataclass
-class AdamaxConf:
-    _target_: str = "torch.optim.Adamax"
-    params: Any = MISSING
-    lr: Any = 0.002
-    betas: Any = (0.9, 0.999)
-    eps: Any = 1e-08
-    weight_decay: Any = 0
 
 
 @dataclass
@@ -112,7 +111,7 @@ class RpropConf:
 class SGDConf:
     _target_: str = "torch.optim.SGD"
     params: Any = MISSING
-    lr: Any = <required parameter>
+    # [passthrough] lr: Any = <required parameter>
     momentum: Any = 0
     dampening: Any = 0
     weight_decay: Any = 0
