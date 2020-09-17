@@ -111,7 +111,7 @@ class RpropConf:
 class SGDConf:
     _target_: str = "torch.optim.SGD"
     params: Any = MISSING
-    # [passthrough] lr: Any = <required parameter>
+    lr: Any = MISSING  # _RequiredParameter
     momentum: Any = 0
     dampening: Any = 0
     weight_decay: Any = 0
