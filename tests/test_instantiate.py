@@ -7,26 +7,22 @@ from torch import Tensor
 from torch.optim import *
 from config.torch.optim import *
 
-class Parameters:
-    def __init__(self, params: Tensor):
-        self.params = params
-    def __iter__(self):
-        return iter(self.params)
-             
+from torch import nn
+model = nn.Linear(20, 30)
 
 @pytest.mark.parametrize(
-    "classname, params, args, kwargs, expected",
+    "classname, toadd, args, kwargs, expected",
     [
-        pytest.param("Adam", {}, [], {"params": Parameters(Tensor([1]))}, Adam, id="AdamConf"),
-        pytest.param("AdamW", {"params": Parameters(Tensor([1]))}, [], {}, AdamW, id="AdamWConf"),
+        pytest.param("Adam", {}, [], {}, Adam, id="AdamConf"),
+        pytest.param("AdamW", {}, [], {}, AdamW, id="AdamWConf"),
     ]
 )
 
 def test_instantiate_classes(
-    classname: str, params: Any, args: Any, kwargs: Any, expected: Any
+    classname: str, toadd: Any, args: Any, kwargs: Any, expected: Any
 ) -> None:
     full_class = f"config.torch.optim.{classname}Conf"
     schema = OmegaConf.structured(get_class(full_class))
-    cfg = OmegaConf.merge(schema, params)
-    obj = instantiate(config=cfg, *args, **kwargs)
+    cfg = OmegaConf.merge(schema, {})
+    obj = instantiate(cfg, params=model.parameters())
     assert type(obj) == expected 
