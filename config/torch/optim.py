@@ -33,7 +33,6 @@ class AdagradConf:
 @dataclass
 class AdamConf:
     _target_: str = "torch.optim.Adam"
-    params: Any = MISSING
     lr: Any = 0.001
     betas: Any = (0.9, 0.999)
     eps: Any = 1e-08
