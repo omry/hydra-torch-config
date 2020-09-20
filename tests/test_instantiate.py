@@ -5,9 +5,10 @@ from omegaconf import OmegaConf
 from torch.optim import *
 from config.torch.optim import *
 
+import torch
 from torch import Tensor
 from torch import nn
-model = nn.Linear(20, 30)
+model = nn.Linear(1, 2)
 
 @pytest.mark.parametrize(
     "classname, cfg, passthrough_kwargs, expected",
@@ -26,6 +27,6 @@ def test_instantiate_classes(
     obj = instantiate(cfg, **passthrough_kwargs)
 
     def closure():
-        return Tensor([10])
-    assert obj.step(closure) == expected.step(closure)
+        return model(Tensor([10]))
+    assert torch.all(torch.eq(obj.step(closure), expected.step(closure)))
 
