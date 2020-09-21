@@ -1,14 +1,14 @@
 import pytest
 from hydra.utils import get_class, instantiate
 from omegaconf import OmegaConf
-from typing import List
-from torch import Tensor
 
 from torch.optim import *
 from config.torch.optim import *
 
+import torch
+from torch import Tensor
 from torch import nn
-model = nn.Linear(20, 30)
+model = nn.Linear(1, 2)
 
 @pytest.mark.parametrize(
     "classname, cfg, passthrough_kwargs, expected",
@@ -25,4 +25,8 @@ def test_instantiate_classes(
     schema = OmegaConf.structured(get_class(full_class))
     cfg = OmegaConf.merge(schema, cfg)
     obj = instantiate(cfg, **passthrough_kwargs)
-    # assert obj == expected
+
+    def closure():
+        return model(Tensor([10]))
+    assert torch.all(torch.eq(obj.step(closure), expected.step(closure)))
+
